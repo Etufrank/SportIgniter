@@ -12,4 +12,14 @@ class CreneauModel extends Model {
                     ->join('ressources', 'ressources.id = creneaux.ressource_id')
                     ->findAll();
     }
+
+    public function getCreneauxFuturs(){
+        return $this->select('creneaux.*, ressources.nom as ressource_nom, ressources.type as ressource_type, ressources.description as ressource_desc')
+                                         ->join('ressources', 'ressources.id = creneaux.ressource_id')
+                                         ->where('creneaux.actif', 1)
+                                         ->where('creneaux.date_debut >=', date('Y-m-d H:i:s'))
+                                         ->orderBy('creneaux.date_debut', 'ASC')
+                                         ->findAll();
+    }
+    
 }
