@@ -2,86 +2,99 @@
 
 <?= $this->section('content') ?>
 
-<section id="page-creneaux" style="padding-top:1rem;">
-
-  <nav class="nav-public">
-    <a href="<?= site_url('client/dashboard') ?>" class="brand">Fit<span>Space</span></a>
-    <div class="nav-links">
-      <a href="<?= site_url('client/dashboard') ?>">Mon espace</a>
-      <a href="<?= site_url('auth/logout') ?>">Déconnexion</a>
-    </div>
-  </nav>
-
-  <div class="page-section">
-    <div class="section-head">
-      <h2>Créneaux disponibles</h2>
-      <span class="count"><?= count($creneaux) ?> créneaux trouvés</span>
-    </div>
-
-    <div class="filter-bar">
-      <button class="filter-pill active">Tous</button>
-      <button class="filter-pill"><i class="bi bi-people-fill"></i> Cours collectifs</button>
-      <button class="filter-pill"><i class="bi bi-door-open-fill"></i> Salles</button>
-      <button class="filter-pill"><i class="bi bi-dribbble"></i> Terrains</button>
-    </div>
-
-    <div class="creneaux-grid">
-      <?php if(!empty($creneaux)): ?>
-        <?php foreach($creneaux as $c): ?>
-          <?php 
-            $isFull = $c['places_dispo'] <= 0; 
-            $capaciteMax = isset($c['capacite']) ? $c['capacite'] : 10;
-            $placesOccupees = $capaciteMax - $c['places_dispo'];
-            $percentage = $capaciteMax > 0 ? ($placesOccupees / $capaciteMax) * 100 : 0;
-          ?>
-          <div class="creneau-card <?= $isFull ? 'full' : '' ?>">
-            <div class="creneau-header">
-              <span class="creneau-type type-<?= esc($c['ressource_type']) ?>">
-                <?php if($c['ressource_type'] === 'cours'): ?>
-                  <i class="bi bi-people-fill"></i> Cours
-                <?php elseif($c['ressource_type'] === 'salle'): ?>
-                  <i class="bi bi-door-open-fill"></i> Salle
-                <?php else: ?>
-                  <i class="bi bi-dribbble"></i> Terrain
-                <?php endif; ?>
-              </span>
-              <span style="font-size:0.75rem;color:var(--muted);"><?= date('D d M', strtotime($c['date_debut'])) ?></span>
-            </div>
-            
-            <p class="creneau-title"><?= esc($c['ressource_nom']) ?></p>
-            
-            <div class="creneau-meta">
-              <div class="meta-row"><i class="bi bi-clock"></i> <?= date('H\hi', strtotime($c['date_debut'])) ?> — <?= date('H\hi', strtotime($c['date_fin'])) ?></div>
-              <div class="meta-row"><i class="bi bi-geo-alt"></i> <?= esc($c['ressource_desc']) ?></div>
-            </div>
-            
-            <div>
-              <div class="places-bar">
-                <div class="places-fill" style="width:<?= $isFull ? '100%' : $percentage.'%' ?>; <?= $isFull ? 'background:var(--muted)' : '' ?>"></div>
-              </div>
-              <div class="places-label">
-                <?php if($isFull): ?>
-                  Complet — 0 place restante
-                <?php else: ?>
-                  <?= esc($c['places_dispo']) ?> places restantes sur <?= $capaciteMax ?>
-                <?php endif; ?>
-              </div>
-            </div>
-
-            <?php if($isFull): ?>
-              <button class="btn-reserver disabled" disabled>Complet</button>
-            <?php else: ?>
-              <a href="<?= site_url('client/reservations/store/'.$c['id']) ?>" class="btn-reserver">Réserver ce créneau</a>
-            <?php endif; ?>
+<section id="page-mes-reservations">
+  <div class="app-wrapper">
+    
+    <aside class="sidebar">
+      <div class="sidebar-logo">Fit<span>Space</span></div>
+      <ul class="sidebar-nav" style="margin-top:1rem;">
+        <li><a href="<?= site_url('client/dashboard') ?>"><i class="bi bi-grid-1x2-fill"></i> Tableau de bord</a></li>
+        <li><a href="<?= site_url('client/reserver') ?>" class="active"><i class="bi bi-calendar3"></i> Voir les créneaux</a></li>
+        <li><a href="<?= site_url('client/reservations') ?>"><i class="bi bi-bookmark-check-fill"></i> Mes réservations</a></li>
+        <li><a href="<?= site_url('client/profil') ?>"><i class="bi bi-person-fill"></i> Mon profil</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="avatar">
+            <?= strtoupper(substr(session()->get('prenom'), 0, 1) . substr(session()->get('nom'), 0, 1)) ?>
           </div>
-        <?php endforeach; ?>
-      <?php else: ?>
-        <p style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 2rem;">Aucun créneau disponible pour le moment.</p>
-      <?php endif; ?>
-    </div>
-  </div>
+          <div class="user-info">
+            <div class="name"><?= esc(session()->get('prenom')) ?> <?= esc(session()->get('nom')) ?></div>
+            <div class="role">Client</div>
+          </div>
+          <a href="<?= site_url('auth/logout') ?>" style="margin-left:auto;color:rgba(255,255,255,0.3);font-size:1.1rem;" title="Déconnexion"><i class="bi bi-box-arrow-right"></i></a>
+        </div>
+      </div>
+    </aside>
 
-  <div class="footer-public">FitSpace &copy; 2026 — Projet CodeIgniter 4 · Tous droits <span>réservés</span></div>
+    <div class="main-content">
+      <div class="topbar">
+        <span class="topbar-title">Créneaux disponibles</span>
+      </div>
+      
+      <div class="page-content">
+        <div class="data-card">
+          <div class="data-card-header">
+            <h3>Toutes les sessions de réservation</h3>
+          </div>
+          
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Ressource</th>
+                <th>Date</th>
+                <th>Horaire</th>
+                <th>Type</th>
+                <th>Statut / Places</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if (!empty($creneaux)): ?>
+                <?php foreach ($creneaux as $c): ?>
+                  <?php 
+                    $isFull = $c['places_dispo'] <= 0; 
+                    $capaciteMax = isset($c['capacite']) ? $c['capacite'] : 10;
+                  ?>
+                  <tr>
+                    <td class="td-name"><?= esc($c['ressource_nom']) ?></td>
+                    <td class="td-muted"><?= date('d M Y', strtotime($c['date_debut'])) ?></td>
+                    <td class="td-muted"><?= date('H\hi', strtotime($c['date_debut'])) ?> – <?= date('H\hi', strtotime($c['date_fin'])) ?></td>
+                    <td>
+                      <span class="creneau-type type-<?= esc($c['ressource_type']) ?>" style="font-size:0.68rem;">
+                        <?= ucfirst(esc($c['ressource_type'])) ?>
+                      </span>
+                    </td>
+                    <td>
+                      <?php if ($isFull): ?>
+                        <span class="badge-statut s-refusee">complet</span>
+                      <?php else: ?>
+                        <span class="badge-statut s-confirmee"><?= esc($c['places_dispo']) ?> / <?= $capaciteMax ?> places</span>
+                      <?php endif; ?>
+                    </td>
+                    <td>
+                      <?php if ($isFull): ?>
+                        <span style="font-size:0.75rem;color:var(--muted);">—</span>
+                      <?php else: ?>
+                        <a href="<?= site_url('client/reservations/store/' . $c['id']) ?>" class="btn-sm-custom btn-nav-primary" style="text-decoration:none; background:var(--accent); color:#fff; padding:5px 12px; border-radius:6px; font-size:0.78rem;">
+                          <i class="bi bi-plus-lg"></i> Réserver
+                        </a>
+                      <?php endif; ?>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <tr>
+                  <td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">Aucun créneau de disponible pour le moment.</td>
+                </tr>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </section>
 
 <?= $this->endSection() ?>
