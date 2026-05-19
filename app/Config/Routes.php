@@ -9,7 +9,9 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 
-$routes->get('/', 'Auth::login');
+$routes->get('/', 'Home::index');
+$routes->get('creneaux-publics', 'Home::creneauxPublics'); 
+
 
 $routes->get('auth/login', 'Auth::login');
 $routes->post('auth/loginHandler', 'Auth::loginHandler');
@@ -32,13 +34,9 @@ $routes->group('admin', function ($routes) {
     $routes->get('dashboard', 'Admin\Dashboard::index');
     $routes->get('clients', 'Admin\Dashboard::clients');
     $routes->get('dashboard/statut/(:num)/(:alpha)', 'Admin\Dashboard::changerStatut/$1/$2');
-    
-   
     $routes->get('ressources', 'Admin\Ressources::index');
     $routes->post('ressources/store', 'Admin\Ressources::store');
     $routes->get('ressources/delete/(:num)', 'Admin\Ressources::delete/$1');
-    
-    
     $routes->get('creneaux', 'Admin\Creneaux::index');
     $routes->post('creneaux/store', 'Admin\Creneaux::store');
     $routes->get('creneaux/delete/(:num)', 'Admin\Creneaux::delete/$1');
