@@ -11,8 +11,8 @@ class Dashboard extends BaseController {
      $reservationModel =new ReservationModel();
         $userModel        = new UserModel();
         $creneauModel     = new CreneauModel();
-        
-   $data['total_reservations']      =      $reservationModel->getTotalReservations();
+
+   $data['total_reservations']      = $reservationModel->getTotalReservations();
         $data['total_clients']      = $userModel->getTotalClients();
         $data['total_creneaux']     = $creneauModel->getTotalCreneaux();
 
