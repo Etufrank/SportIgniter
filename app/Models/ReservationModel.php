@@ -22,4 +22,8 @@ class ReservationModel extends Model {
                     ->join('ressources', 'ressources.id = creneaux.ressource_id')
                     ->findAll();
     }
+
+    public function getTotalReservations() {
+        return $this->countAllResults();
+    }
 }

@@ -6,4 +6,13 @@ class UserModel extends Model {
     protected $table = 'users';
     protected $primaryKey = 'id';
     protected $allowedFields = ['nom', 'email', 'password', 'role', 'created_at'];
+
+public function getClient() {
+        return $this->where('role', 'client')->findAll();
+    }
+
+    public function getTotalClients() {
+        return $this->where('role', 'client')->countAllResults();
+    }
+
 }

@@ -8,11 +8,15 @@ class Dashboard extends BaseController {
     public function index() {
         if (session()->get('user_role') !== 'admin') return redirect()->to('auth/login');
         
-        $db = \Config\Database::connect();
-        $data['total_reservations'] = $db->table('reservations')->countAllResults();
-        $data['total_clients'] = $db->table('users')->where('role', 'client')->countAllResults();
-        $data['total_creneaux'] = $db->table('creneaux')->countAllResults();
+     $reservationModel =new ReservationModel();
+        $userModel        = new UserModel();
+        $creneauModel     = new CreneauModel();
         
+   $data['total_reservations']      =      $reservationModel->getTotalReservations();
+        $data['total_clients']      = $userModel->getTotalClients();
+        $data['total_creneaux']     = $creneauModel->getTotalCreneaux();
+
+
         $reservationModel = new ReservationModel();
         $data['reservations'] = $reservationModel->getReservationsGlobal();
 
@@ -23,7 +27,7 @@ class Dashboard extends BaseController {
         if (session()->get('user_role') !== 'admin') return redirect()->to('auth/login');
         
         $userModel = new UserModel();
-        $data['clients'] = $userModel->where('role', 'client')->findAll();
+        $data['clients'] = $userModel-> getClient();
         return view('admin/liste_clients', $data);
     }
 

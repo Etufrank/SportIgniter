@@ -21,5 +21,9 @@ class CreneauModel extends Model {
                                          ->orderBy('creneaux.date_debut', 'ASC')
                                          ->findAll();
     }
+
+    public function getTotalCreneaux() {
+        return $this->countAllResults();
+    }
     
 }
