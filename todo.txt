@@ -1,0 +1,39 @@
+app/
+├── Config/
+│   └── Routes.php             <-- (Fichier existant à modifier pour vos routes)
+│
+├── Controllers/
+│   ├── Auth.php               <-- Connexion, Inscription, Déconnexion
+│   │
+│   ├── Client/                <-- Répertoire à créer pour l'Espace Client
+│   │   ├── Dashboard.php       <-- Menu principal / Tableau de bord du client
+│   │   └── Reservations.php    <-- Gestion des réservations (Prendre/Annuler)
+│   │
+│   └── Admin/                 <-- Répertoire à créer pour l'Espace Admin
+│       ├── Dashboard.php       <-- Statistiques et vue d'ensemble du centre
+│       ├── Ressources.php      <-- Gestion des salles, terrains, cours
+│       └── Creneaux.php        <-- Planification des horaires et places
+│
+├── Models/                    <-- Fichiers à créer dans le dossier existant
+│   ├── UserModel.php           <-- Fait le lien avec la table 'users'
+│   ├── RessourceModel.php      <-- Fait le lien avec la table 'ressources'
+│   ├── CreneauModel.php        <-- Fait le lien avec la table 'creneaux'
+│   └── ReservationModel.php    <-- Fait le lien avec la table 'reservations'
+│
+└── Views/
+    ├── layouts/               <-- Répertoire pour la structure commune
+    │   └── main.php            <-- Contient le <head>, le CSS global et les scripts
+    │
+    ├── auth/                  <-- Répertoire pour les formulaires d'accès
+    │   ├── login.php           <-- Formulaire de connexion (Template page 3)
+    │   └── register.php        <-- Formulaire d'inscription (Template page 4)
+    │
+    ├── client/                <-- Répertoire pour les pages du client
+    │   ├── dashboard.php       <-- Mes réservations (Template page 5)
+    │   └── reserver.php        <-- Liste des créneaux à réserver (Template page 1 & 2)
+    │
+    └── admin/                 <-- Répertoire pour le back-office
+        ├── dashboard.php       <-- Vue d'ensemble + stats (Template page 6)
+        ├── ressources.php      <-- Formulaire + liste des ressources (Template page 9)
+        ├── creneaux.php        <-- Formulaire + liste des créneaux (Template page 8)
+        └── liste_clients.php   <-- Liste des clients inscrits (Template page 7)
