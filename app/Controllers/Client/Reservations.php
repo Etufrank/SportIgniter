@@ -9,7 +9,7 @@ use App\Models\ReservationModel;
 class Reservations extends BaseController
 {
     protected $helpers = ['form'];
-
+ 
     public function reserver()
     {
         if (!session()->get('isLoggedIn')) {
@@ -18,12 +18,7 @@ class Reservations extends BaseController
         
         $creneauModel = new CreneauModel();
         
-        $data['creneaux'] = $creneauModel->select('creneaux.*, ressources.nom as ressource_nom, ressources.type as ressource_type, ressources.description as ressource_desc, ressources.capacite')
-                                         ->join('ressources', 'ressources.id = creneaux.ressource_id')
-                                         ->where('creneaux.actif', 1)
-                                         ->where('creneaux.date_debut >=', date('Y-m-d H:i:s'))
-                                         ->orderBy('creneaux.date_debut', 'ASC')
-                                         ->findAll();
+        $data['creneaux'] = $creneauModel->getCreneauxReservations();
 
         return view('client/reserver', $data);
     }
