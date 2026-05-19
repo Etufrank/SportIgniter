@@ -5,10 +5,11 @@
 <section id="page-creneaux" style="padding-top:1rem;">
 
   <nav class="nav-public">
-    <a href="<?= site_url('client/dashboard') ?>" class="brand">Fit<span>Space</span></a>
+    <a href="<?= site_url('/') ?>" class="brand">Fit<span>Space</span></a>
     <div class="nav-links">
-      <a href="<?= site_url('client/dashboard') ?>">Mon espace</a>
-      <a href="<?= site_url('auth/logout') ?>">Déconnexion</a>
+      <a href="<?= site_url('/') ?>">Accueil</a>
+      <a href="<?= site_url('auth/login') ?>">Connexion</a>
+      <a href="<?= site_url('auth/register') ?>" class="btn-nav-primary">S'inscrire</a>
     </div>
   </nav>
 
@@ -71,12 +72,12 @@
             <?php if($isFull): ?>
               <button class="btn-reserver disabled" disabled>Complet</button>
             <?php else: ?>
-              <a href="<?= site_url('client/reservations/store/'.$c['id']) ?>" class="btn-reserver">Réserver ce créneau</a>
+              <a href="<?= site_url('auth/login') ?>" class="btn-reserver">Connexion pour réserver</a>
             <?php endif; ?>
           </div>
         <?php endforeach; ?>
       <?php else: ?>
-        <p style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 2rem;">Aucun créneau disponible pour le moment.</p>
+        <p style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 2rem;">Aucun créneau planifié pour le moment.</p>
       <?php endif; ?>
     </div>
   </div>
