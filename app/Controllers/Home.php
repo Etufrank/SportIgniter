@@ -18,12 +18,7 @@ class Home extends BaseController
         $creneauModel = new CreneauModel();
         
         // On récupère les créneaux futurs avec leurs ressources associées
-        $data['creneaux'] = $creneauModel->select('creneaux.*, ressources.nom as ressource_nom, ressources.type as ressource_type, ressources.description as ressource_desc')
-                                         ->join('ressources', 'ressources.id = creneaux.ressource_id')
-                                         ->where('creneaux.actif', 1)
-                                         ->where('creneaux.date_debut >=', date('Y-m-d H:i:s'))
-                                         ->orderBy('creneaux.date_debut', 'ASC')
-                                         ->findAll();
+        $data['creneaux'] = $creneauModel->getCreneauxFuturs();
 
         return view('creneaux_publics', $data);
     }
